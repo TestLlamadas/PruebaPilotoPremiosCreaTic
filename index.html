@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Landing Autoevaluación Telefónica</title>
+  <style>
+    :root{--primary:#0b6cf0;--bg:#f4f6fb;--card:#ffffff;--text:#111827;--muted:#6b7280;--success:#10b981;--warning:#f59e0b;--danger:#ef4444}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--text)}
+    .container{max-width:1000px;margin:0 auto;padding:24px}
+    .header{text-align:center;margin-bottom:32px}
+    h1{font-size:2rem;margin-bottom:8px}
+    p.lead{color:var(--muted);font-size:1.1rem}
+    .card{background:var(--card);padding:24px;border-radius:12px;box-shadow:0 6px 18px rgba(15,23,42,0.06);margin-bottom:24px}
+    fieldset{border:1px solid #e6e9ef;padding:16px;border-radius:8px;margin-bottom:16px}
+    legend{font-weight:600;padding:0 8px}
+    ul{list-style:none;padding:0;margin:6px 0}
+    li{display:flex;align-items:flex-start;padding:8px 6px;border-radius:6px}
+    label{display:flex;align-items:center;gap:10px;cursor:pointer}
+    input[type=checkbox]{width:18px;height:18px;margin-top:3px}
+    input[type=text],input[type=email]{width:100%;padding:10px;border-radius:6px;border:1px solid #d1d5db;margin-bottom:12px}
+    button{background:var(--primary);color:white;border:0;padding:12px 20px;border-radius:8px;cursor:pointer;font-weight:600;font-size:1rem}
+    button.ghost{background:transparent;color:var(--primary);border:1px solid rgba(11,108,240,0.12)}
+    .result{margin-top:14px;padding:16px;border-radius:8px;background:#f1f5f9;border:1px dashed #e2e8f0;display:none}
+    .score{font-size:1.4rem;font-weight:700;margin-bottom:8px}
+    .legend-key{display:flex;gap:12px;margin-top:8px;color:var(--muted);flex-wrap:wrap}
+    .legend-key span{display:flex;gap:4px;align-items:center}
+    .color-box{width:16px;height:16px;border-radius:4px;display:inline-block}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>Autoevaluación de Competencias Telefónicas</h1>
+      <p class="lead">Descubre tu nivel profesional en llamadas y mejora tus resultados hoy.</p>
+    </header>
+
+    <section class="card">
+      <form id="checklistForm" onsubmit="return false;">
+        <!-- Repetimos los fieldsets del checklist -->
+        <fieldset>
+          <legend>Comunicación</legend>
+          <ul>
+            <li><label><input type="checkbox"> Mantengo un tono de voz claro, seguro y profesional</label></li>
+            <li><label><input type="checkbox"> Evito muletillas y palabras innecesarias</label></li>
+            <li><label><input type="checkbox"> Sé adaptar mi lenguaje al perfil del cliente</label></li>
+          </ul>
+        </fieldset>
+
+        <fieldset>
+          <legend>Escucha activa</legend>
+          <ul>
+            <li><label><input type="checkbox"> Dejo hablar al cliente sin interrumpir</label></li>
+            <li><label><input type="checkbox"> Reformulo lo que el cliente me dice para confirmar</label></li>
+            <li><label><input type="checkbox"> Detecto necesidades más allá de lo que expresa</label></li>
+          </ul>
+        </fieldset>
+
+        <fieldset>
+          <legend>Organización y gestión del tiempo</legend>
+          <ul>
+            <li><label><input type="checkbox"> Llevo la llamada a buen término sin alargarla innecesariamente</label></li>
+            <li><label><input type="checkbox"> Registro datos clave en el CRM de forma ordenada</label></li>
+            <li><label><input type="checkbox"> Planifico mis llamadas con objetivos claros</label></li>
+          </ul>
+        </fieldset>
+
+        <fieldset>
+          <legend>Manejo de objeciones y conflictos</legend>
+          <ul>
+            <li><label><input type="checkbox"> Respondo a negativas o quejas con calma y seguridad</label></li>
+            <li><label><input type="checkbox"> Ofrezco soluciones concretas en lugar de excusas</label></li>
+            <li><label><input type="checkbox"> Mantengo actitud profesional en llamadas difíciles</label></li>
+          </ul>
+        </fieldset>
+
+        <fieldset>
+          <legend>Orientación al cliente y empatía</legend>
+          <ul>
+            <li><label><input type="checkbox"> Me intereso genuinamente por el cliente</label></li>
+            <li><label><input type="checkbox"> Puedo ponerme en su lugar para comprender su situación</label></li>
+            <li><label><input type="checkbox"> Transmito cercanía y confianza sin perder formalidad</label></li>
+          </ul>
+        </fieldset>
+
+        <fieldset>
+          <legend>Resiliencia y motivación</legend>
+          <ul>
+            <li><label><input type="checkbox"> Acepto el “no” sin frustrarme</label></li>
+            <li><label><input type="checkbox"> Aprendo de errores o rechazos para mejorar</label></li>
+            <li><label><input type="checkbox"> Mantengo energía y entusiasmo durante la jornada</label></li>
+          </ul>
+        </fieldset>
+
+        <!-- Captura de leads -->
+        <fieldset>
+          <legend>Obtén tu informe completo</legend>
+          <input type="text" placeholder="Nombre" required>
+          <input type="email" placeholder="Correo electrónico" required>
+        </fieldset>
+
+        <button id="calcBtn">Calcular y recibir informe</button>
+      </form>
+
+      <div id="result" class="result" aria-live="polite">
+        <div class="score">Puntuación: <span id="scoreVal">0</span> / 18</div>
+        <div id="advice" style="margin-top:8px;"></div>
+        <div class="legend-key">
+          <span><span class="color-box" style="background:var(--danger)"></span>0-8 → Necesita mejorar</span>
+          <span><span class="color-box" style="background:var(--warning)"></span>9-15 → En buen camino</span>
+          <span><span class="color-box" style="background:var(--success)"></span>16-18 → Nivel profesional</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const calcBtn = document.getElementById('calcBtn');
+    const resultBox = document.getElementById('result');
+    const scoreVal = document.getElementById('scoreVal');
+    const advice = document.getElementById('advice');
+
+    calcBtn.addEventListener('click', ()=>{
+      const checkboxes = Array.from(document.querySelectorAll('input[type=checkbox]'));
+      const checked = checkboxes.filter(c=>c.checked).length;
+      scoreVal.textContent = checked;
+      resultBox.style.display='block';
+      if(checked <= 8){
+        advice.textContent='Necesitas mejorar varias competencias. Te recomendamos trabajar comunicación, manejo de objeciones y resiliencia como prioridades.';
+      } else if(checked <= 15){
+        advice.textContent='Vas por buen camino. Pulir detalles como la gestión del tiempo y la escucha activa te llevará al siguiente nivel.';
+      } else {
+        advice.textContent='Excelente. Tienes un nivel profesional sólido. Mantén la práctica y comparte buenas prácticas con tu equipo.';
+      }
+      resultBox.scrollIntoView({behavior:'smooth',block:'center'});
+    });
+  </script>
+</body>
+</html>
